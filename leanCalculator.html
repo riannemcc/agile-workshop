@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+​
+<form>
+  <label style="display: block;">Amount</label>
+  <input type="number" id="amount" />
+​
+  <label style="display: block;">Price per item</label>
+  <input type="number" id="price" />
+​
+  <label style="display: block;">Amount</label>
+  <select id="state">
+    <option value="UT">UT</option>
+    <option value="NV">NV</option>
+    <option value="TX">TX</option>
+    <option value="AL">AL</option>
+    <option value="CA">CA</option>
+  </select>
+</br>
+  <button type="button" id="button">CALCULATE!</button>
+​
+  <div>Total: <span id="total"></span></div>
+</form>
+​
+<script>
+  const totalEl = document.querySelector('#total')
+  const buttonEl = document.querySelector('#button')
+  const amountEl = document.querySelector('#amount')
+  const priceEl = document.querySelector('#price')
+  const stateEl = document.querySelector('#state')
+​
+  function multiplier(amount, price) {
+      return amount * price
+    }
+​
+    CONFIG = {
+      taxes: {
+        UT: 6.85,
+        NV: 8,
+        TX: 6.25,
+        AL: 4,
+        CA: 8.25,
+      }
+    }
+​
+    function tax(value, state) {
+      let tax = CONFIG.taxes[state] || 0
+​
+      return (100 + tax) * value / 100
+    }
+​
+    function discount(value) {
+      let discount = 0
+​
+      if (value >= 15000) {
+        discount = 15
+      } else if (value >= 10000) {
+        discount = 10
+      } else if (value >= 7000) {
+        discount = 7
+      } else if (value >= 5000) {
+        discount = 5
+      } else if (value >= 1000) {
+        discount = 3
+      }
+​
+      return (100 - discount) * value / 100
+    }
+​
+    function inputCalculator(amount, price, state) {
+      const totalPrice = multiplier(amount, price)
+      const resultWithTax = tax(totalPrice, state)
+      const resultwithDiscount = discount(resultWithTax).toFixed(2)
+      return resultwithDiscount
+    }
+​
+​
+    buttonEl.addEventListener('click', () => {
+      const amount = amountEl.value
+      const price = priceEl.value
+      const state = stateEl.value
+​
+      totalEl.innerHTML = inputCalculator(amount, price, state)
+    })
+​
+</script>
+</body>
+</html>
